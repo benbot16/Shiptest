@@ -127,6 +127,8 @@
 
 /mob/camera/aiEye/Destroy()
 	if(ai)
+		if(ai.eyeobj == src)
+			ai.eyeobj = null
 		ai.all_eyes -= src
 		ai = null
 	for(var/V in visibleCameraChunks)
