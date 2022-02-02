@@ -11,7 +11,7 @@
 	var/mob/living/docking_camera_user
 	var/mob/camera/aiEye/remote/shuttle_docker/eyeobj
 	///What we can dock on
-	var/static/list/whitelist_turfs = typecacheof(/turf/open/space, /turf/open/floor/grass, /turf/open/floor/plating/asteroid, /turf/open/lava, /turf/closed/mineral)
+	var/static/list/whitelist_turfs = typecacheof(list(/turf/open/space, /turf/open/floor/grass, /turf/open/floor/plating/grass, /turf/open/floor/plating/asteroid, /turf/open/lava, /turf/closed/mineral))
 	///What we're designating
 	var/designating_target_loc
 	var/designate_time = 5 SECONDS
@@ -178,7 +178,7 @@
 		to_add += the_eye.placement_images
 		to_add += the_eye.placed_images
 		user.client.images += to_add
-		user.client.view_size.setTo(max(shuttle.width, shuttle.height) + 4)
+		user.client.view_size.zoomOut(max(shuttle.width, shuttle.height + 4) * 0.5)
 
 /obj/structure/overmap/ship/simulated/proc/remove_eye_control(mob/user)
 	if(!user)
@@ -194,7 +194,7 @@
 		user.reset_perspective(null)
 		if(eyeobj.visible_icon && user.client)
 			user.client.images -= eyeobj.user_image
-		user.client.view_size.unsupress()
+		user.client.view_size.zoomIn()
 
 	eyeobj.eye_user = null
 	user.remote_control = null
@@ -238,7 +238,6 @@
 
 	if(landing_clear != SHUTTLE_DOCKER_LANDING_CLEAR)
 		to_chat(docking_camera_user, "<span class='warning'>Target LZ obstructed.</span>")
-		remove_eye_control(docking_camera_user)
 		return
 
 	// Makes a port for us to dock at that gets deleted after undocking.
