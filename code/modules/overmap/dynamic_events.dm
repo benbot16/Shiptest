@@ -40,6 +40,8 @@
 		QDEL_NULL(mapzone)
 
 /obj/structure/overmap/dynamic/ship_act(mob/user, obj/structure/overmap/ship/simulated/acting)
+	if(acting.docking_target) // Someone's already docking us
+		to_chat(user, "<span class='notice'>Someone's already docking the shuttle.</span>")
 	var/prev_state = acting.state
 	acting.state = OVERMAP_SHIP_ACTING //This is so the controls are locked while loading the level to give both a sense of confirmation and to prevent people from moving the ship
 	. = load_level(acting.shuttle)
@@ -47,16 +49,21 @@
 		acting.state = prev_state
 	else
 		var/dock_to_use = null
-		if(!reserve_dock.get_docked())
-			dock_to_use = reserve_dock
-		else if(!reserve_dock_secondary.get_docked())
-			dock_to_use = reserve_dock_secondary
-
+		var/custom_dock = tgui_alert(usr, "Would you like to choose a custom landing zone?", "Docking", list("Yes", "No"), 10 SECONDS)
+		if(custom_dock != "Yes")
+			if(!reserve_dock.get_docked())
+				dock_to_use = reserve_dock
+			else if(!reserve_dock_secondary.get_docked())
+				dock_to_use = reserve_dock_secondary
+		else
+			acting.give_eye_control(user, src) // We pass it off to the ship and its docking camera here.
+			return
 		if(!dock_to_use)
 			acting.state = prev_state
 			to_chat(user, "<span class='notice'>All potential docking locations occupied.</span>")
 			return
-		adjust_dock_to_shuttle(dock_to_use, acting.shuttle)
+		if(!custom_dock) // Only adjust the dock if we haven't chosen a custom dock.
+			adjust_dock_to_shuttle(dock_to_use, acting.shuttle)
 		to_chat(user, "<span class='notice'>[acting.dock(src, dock_to_use)]</span>") //If a value is returned from load_level(), say that, otherwise, commence docking
 
 /**

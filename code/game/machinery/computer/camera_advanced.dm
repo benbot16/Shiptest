@@ -199,7 +199,7 @@
 		T = get_turf(T)
 		if(!force_update)
 			var/datum/map_zone/mapzone = T.get_map_zone()
-			if(!mapzone.is_in_bounds(T))
+			if(!mapzone?.is_in_bounds(T))
 				return
 		if (T)
 			forceMove(T)

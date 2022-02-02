@@ -30,6 +30,10 @@
 #define SHUTTLE_ALREADY_DOCKED "we are already docked"
 #define SHUTTLE_SOMEONE_ELSE_DOCKED "someone else docked"
 
+// Custom landing zone values
+#define SHUTTLE_DOCKER_LANDING_CLEAR 1
+#define SHUTTLE_DOCKER_BLOCKED 2
+
 //Launching Shuttles to CentCom
 #define NOLAUNCH -1
 #define UNLAUNCHED 0

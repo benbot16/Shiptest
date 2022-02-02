@@ -3263,6 +3263,7 @@ g// DM Environment file for shiptest.dme.
 #include "whitesands\code\game\machinery\doors\spacepod.dm"
 #include "whitesands\code\game\machinery\porta_turret\portable_turret.dm"
 #include "whitesands\code\game\machinery\shuttle\custom_shuttle.dm"
+#include "whitesands\code\game\machinery\shuttle\shuttle_docking.dm"
 #include "whitesands\code\game\machinery\shuttle\shuttle_engine.dm"
 #include "whitesands\code\game\machinery\shuttle\shuttle_engine_types.dm"
 #include "whitesands\code\game\machinery\shuttle\shuttle_heater.dm"
