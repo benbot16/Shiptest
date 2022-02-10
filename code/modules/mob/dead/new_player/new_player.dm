@@ -327,6 +327,7 @@
 
 	if(length(ship.job_slots) > 1 && ship.job_slots[1] == job) // if it's the "captain" equivalent job of the ship. checks to make sure it's not a one-job ship
 		minor_announce("[job.title] [character.real_name] on deck!", zlevel = ship.shuttle.virtual_z())
+	return TRUE // Spawn successful, let our caller know
 
 /mob/dead/new_player/proc/AddEmploymentContract(mob/living/carbon/human/employee)
 	//TODO:  figure out a way to exclude wizards/nukeops/demons from this.
@@ -365,7 +366,7 @@
 		if(tgui_alert(src, "Customize your ship?",  "Welcome, [client.prefs.real_name].", list("Yes", "No")) == "Yes") // Allows users to customize their ship name/desc before the ship's spawned in and people are joining
 			custom_title = stripped_input(src, "Enter your ship's name.", "Ship Name")
 			custom_desc = stripped_input(src, "Enter a description to be shown to crew joining your ship.", "Ship Cryogenics Management")
-			allow_joining = tgui_alert(src, "Would you like to disable cryo spawning?",  "Ship Cryogenics Management", list("Yes", "No")) == "Yes"
+			allow_joining = (tgui_alert(src, "Would you like to disable cryo spawning?",  "Ship Cryogenics Management", list("Yes", "No")) == "No")
 		close_spawn_windows()
 		to_chat(usr, "<span class='danger'>Your [template.name] is being prepared. Please be patient!</span>")
 		var/obj/docking_port/mobile/target = SSshuttle.load_template(template)
