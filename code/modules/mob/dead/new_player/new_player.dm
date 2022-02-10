@@ -359,6 +359,13 @@
 					if(template.limit <= count)
 						alert(src, "The ship limit of [template.limit] has been reached this round.")
 						return
+		var/custom_title
+		var/custom_desc
+		var/allow_joining
+		if(tgui_alert(src, "Customize your ship?",  "Welcome, [client.prefs.real_name].", list("Yes", "No")) == "Yes") // Allows users to customize their ship name/desc before the ship's spawned in and people are joining
+			custom_title = stripped_input(src, "Enter your ship's name.", "Ship Name")
+			custom_desc = stripped_input(src, "Enter a description to be shown to crew joining your ship.", "Ship Cryogenics Management")
+			allow_joining = tgui_alert(src, "Would you like to disable cryo spawning?",  "Ship Cryogenics Management", list("Yes", "No")) == "Yes"
 		close_spawn_windows()
 		to_chat(usr, "<span class='danger'>Your [template.name] is being prepared. Please be patient!</span>")
 		var/obj/docking_port/mobile/target = SSshuttle.load_template(template)
@@ -367,9 +374,18 @@
 			new_player_panel()
 			return
 		SSblackbox.record_feedback("tally", "ship_purchased", 1, template.name) //If you are copy-pasting this, ensure the 2nd parameter is unique to the new proc!
-		if(!AttemptLateSpawn(target.current_ship.job_slots[1], target.current_ship)) //Try to spawn as the first listed job in the job slots (usually captain)
+		var/obj/structure/overmap/ship/simulated/current_ship = target.current_ship
+		// Sets up customization, if applicable
+		if(custom_title)
+			current_ship.set_ship_name(custom_title, TRUE)
+		if(custom_desc)
+			current_ship.memo = custom_desc
+		if(!AttemptLateSpawn(current_ship.job_slots[1], target.current_ship)) //Try to spawn as the first listed job in the job slots (usually captain)
 			to_chat(usr, "<span class='danger'>Ship spawned, but you were unable to be spawned. You can likely try to spawn in the ship through joining normally, but if not, please contact an admin.</span>")
 			new_player_panel()
+			allow_joining = TRUE // Prevents someone from getting locked out of their ship if they can't get spawned for some reason.
+		if(!allow_joining)
+			current_ship.join_allowed = FALSE
 		return
 
 	if(selected_ship.memo)
