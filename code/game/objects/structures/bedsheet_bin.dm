@@ -20,6 +20,8 @@ LINEN BINS
 	w_class = WEIGHT_CLASS_TINY
 	resistance_flags = FLAMMABLE
 	dying_key = DYE_REGISTRY_BEDSHEET
+	greyscale_icon_state = "bedsheet"
+	greyscale_colors = list(list(11, 15), list(16, 4), list(16,22))
 
 	dog_fashion = /datum/dog_fashion/head/ghost
 	var/list/dream_messages = list("white")
@@ -136,6 +138,7 @@ LINEN BINS
 	name = "Royal Cape of the Liberator"
 	desc = "Majestic."
 	dream_messages = list("mining", "stone", "a golem", "freedom", "doing whatever")
+	custom_price = 500
 
 /obj/item/bedsheet/medical
 	name = "medical blanket"
